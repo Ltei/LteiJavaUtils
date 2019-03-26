@@ -1,0 +1,16 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile kotlin_compile_path
+    
+    compile cfuture_compile_path
+    compile gson_compile_path
+    compile okhttp_compile_path
+
+    compile project(':ljubase')
+}

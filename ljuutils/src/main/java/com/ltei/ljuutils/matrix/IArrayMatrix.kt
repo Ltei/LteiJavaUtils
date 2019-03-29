@@ -7,10 +7,14 @@ interface IArrayMatrix<T>: IMatrix<T> {
 
 
     override fun get(row: Int, col: Int): T {
+        if (row < 0 || row >= rows) throw IndexOutOfBoundsException("$row / $rows")
+        if (col < 0 || col >= cols) throw IndexOutOfBoundsException("$col / $cols")
         return get1d(getArrayIndex(row, col))
     }
 
     override fun set(row: Int, col: Int, value: T) {
+        if (row < 0 || row >= rows) throw IndexOutOfBoundsException("$row / $rows")
+        if (col < 0 || col >= cols) throw IndexOutOfBoundsException("$col / $cols")
         set1d(getArrayIndex(row, col), value)
     }
 
@@ -24,15 +28,19 @@ interface IArrayMatrix<T>: IMatrix<T> {
 
 
     fun getArrayIndex(row: Int, col: Int): Int {
+        if (row < 0 || row >= rows) throw IndexOutOfBoundsException("$row / $rows")
+        if (col < 0 || col >= cols) throw IndexOutOfBoundsException("$col / $cols")
         return row + col * rows
     }
 
-    fun getRowFromArrayIndex(arrayIndex: Int): Int {
-        return arrayIndex % rows
+    fun getRowFromArrayIndex(index: Int): Int {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("$index / $size")
+        return index % rows
     }
 
-    fun getColFromArrayIndex(arrayIndex: Int): Int {
-        return arrayIndex / rows
+    fun getColFromArrayIndex(index: Int): Int {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("$index / $size")
+        return index / rows
     }
 
 }

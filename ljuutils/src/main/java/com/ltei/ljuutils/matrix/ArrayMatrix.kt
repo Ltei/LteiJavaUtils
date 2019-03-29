@@ -36,7 +36,7 @@ class ArrayMatrix<T>(
         inline fun <reified T> defaultCreateArray(size: Int, noinline init: (index: Int) -> T): Array<T> {
             return Array(size, init)
         }
-        fun <T> nullInit(row: Int, col: Int): T? {
+        fun <T> nullInit(@Suppress("UNUSED_PARAMETER") row: Int, @Suppress("UNUSED_PARAMETER") col: Int): T? {
             return null
         }
     }

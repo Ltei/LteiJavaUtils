@@ -4,6 +4,7 @@ interface IMatrix<T> {
 
     val rows: Int
     val cols: Int
+    val size: Int get() = rows * cols
 
     fun get(row: Int, col: Int): T
     fun set(row: Int, col: Int, value: T)

@@ -1,6 +1,6 @@
 rootProject.name = 'lteijavautils'
 
 include(':ljubase')
-include(':ljuutils')
 include(':ljugson')
+include(':ljuutils')
 include(':ljuwebclient')

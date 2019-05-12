@@ -18,30 +18,30 @@ interface IModelSaver<Model> {
 
 }
 
-class TestModel
-
-object TestSaver : IModelSaver<TestModel> {
-
-    override val currentVersionId: Int = 1
-
-    private val allVersions = mapOf(
-        Pair(1, V1)
-    )
-
-    override fun getVersion(id: Int): IModelSaver.Version<TestModel> = allVersions.getValue(id)
-
-    override fun getSavedVersion(): IModelSaver.Version<TestModel>? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    object V1 : IModelSaver.Version<TestModel> {
-        override fun load(): TestModel? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun save(model: TestModel) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-    }
-
-}
+//class TestModel
+//
+//object TestSaver : IModelSaver<TestModel> {
+//
+//    override val currentVersionId: Int = 1
+//
+//    private val allVersions = mapOf(
+//        Pair(1, V1)
+//    )
+//
+//    override fun getVersion(id: Int): IModelSaver.Version<TestModel> = allVersions.getValue(id)
+//
+//    override fun getSavedVersion(): IModelSaver.Version<TestModel>? {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//
+//    object V1 : IModelSaver.Version<TestModel> {
+//        override fun load(): TestModel? {
+//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        }
+//
+//        override fun save(model: TestModel) {
+//            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        }
+//    }
+//
+//}

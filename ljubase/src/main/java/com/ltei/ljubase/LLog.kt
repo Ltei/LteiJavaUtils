@@ -7,6 +7,8 @@ object LLog {
     const val LOG_LEVEL_WARN = 2
     const val LOG_LEVEL_ERROR = 3
 
+    var STACKTRACE_DELTA = 3 // 4
+
     private const val XAVIER_TAG: String = "XAV"
     var DISABLE_LOGS = false
 
@@ -44,7 +46,7 @@ object LLog {
     }
 
     private fun logParametrizedName(c: Class<*>): String {
-        val stackTrace = Thread.currentThread().stackTrace.drop(4)
+        val stackTrace = Thread.currentThread().stackTrace.drop(STACKTRACE_DELTA)
 
         val lineNumber = stackTrace.first().lineNumber.toString()
         val methodName: String = stackTrace.find {

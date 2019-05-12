@@ -35,12 +35,17 @@ interface IArrayMatrix<T>: IMatrix<T> {
 
     fun getRowFromArrayIndex(index: Int): Int {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("$index / $size")
-        return index % rows
+        return Companion.getRowFromArrayIndex(rows, index)
     }
 
     fun getColFromArrayIndex(index: Int): Int {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("$index / $size")
-        return index / rows
+        return Companion.getColFromArrayIndex(rows, index)
+    }
+
+    companion object {
+        fun getRowFromArrayIndex(rows: Int, index: Int): Int = index % rows
+        fun getColFromArrayIndex(rows: Int, index: Int): Int = index / rows
     }
 
 }

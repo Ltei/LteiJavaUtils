@@ -7,4 +7,6 @@ repositories {
 
 dependencies {
     compile kotlin_compile_path
+    
+    compile project(":ljugson")
 }

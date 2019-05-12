@@ -31,6 +31,11 @@ object LAssert {
             throw LException("$value1Tag($value1) != $value2Tag($value2)")
         }
     }
+    fun eq(value1: Float, value2: Float, delta: Float = 0.00001f, value1Tag: String = "value1", value2Tag: String = "value2") {
+        if (value1 < value2 - delta || value1 > value2 + delta) {
+            throw LException("$value1Tag($value1) != $value2Tag($value2)")
+        }
+    }
     fun ne(value1: Any?, value2: Any?, value1Tag: String = "value1", value2Tag: String = "value2") {
         if (value1 == value2) {
             throw LException("$value1Tag($value1) == $value2Tag($value2)")
@@ -44,9 +49,9 @@ object LAssert {
     }
 
     fun noNull(vararg values: Any?) {
-        for (v in values) {
+        for ((idx, v) in values.withIndex()) {
             if (v == null) {
-                throw LException("value($v) is null")
+                throw LException("value $idx is null")
             }
         }
     }

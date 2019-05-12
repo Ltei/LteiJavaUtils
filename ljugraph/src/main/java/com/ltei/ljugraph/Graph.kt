@@ -30,8 +30,8 @@ class Graph<NodeInfo, EdgeInfo> {
     val edges: List<GraphEdge<NodeInfo, EdgeInfo>> get() = mEdges
 
     /**
-     * Create a node in the com.ltei.ljugraph
-     * @param attrs GraphVertexInfo object of the Node
+     * Create a node in the Graph
+     * @param info NodeInfo object of the Node
      * @return GraphNode the created node
      */
     fun createNode(id: Int, info: NodeInfo): GraphNode<NodeInfo, EdgeInfo> {
@@ -44,7 +44,7 @@ class Graph<NodeInfo, EdgeInfo> {
     }
 
     /**
-     * Create a vertex in the com.ltei.ljugraph
+     * Create a vertex in the Graph
      * @param node0 initial extremity
      * @param node1 terminal extremity
      * @return GraphEdge the vertex between node0 and node1
@@ -58,12 +58,12 @@ class Graph<NodeInfo, EdgeInfo> {
     }
 
     /**
-     * Delete a node in the com.ltei.ljugraph
+     * Delete a node in the Graph
      * @param node the node nodeTo be deleted
      */
     fun deleteNode(node: GraphNode<NodeInfo, EdgeInfo>) {
         if (!mNodes.contains(node))
-            throw IllegalArgumentException("This node is not in this com.ltei.ljugraph")
+            throw IllegalArgumentException("This node is not in this Graph")
 
         mNodes.remove(node)
         while (node.edges.isNotEmpty()) {
@@ -72,11 +72,11 @@ class Graph<NodeInfo, EdgeInfo> {
     }
 
     /**
-     * Delete a edge in the com.ltei.ljugraph
+     * Delete a edge in the Graph
      * @param edge the edge nodeTo be deleted
      */
     fun deleteEdge(edge: GraphEdge<NodeInfo, EdgeInfo>) {
-        if (!mEdges.contains(edge)) throw IllegalArgumentException("This edge is not in this com.ltei.ljugraph.")
+        if (!mEdges.contains(edge)) throw IllegalArgumentException("This edge is not in this Graph.")
         if (!edge.nodeFrom.edges.contains(edge)) throw IllegalStateException()
         if (!edge.nodeTo.edges.contains(edge)) throw IllegalStateException()
 
@@ -86,7 +86,7 @@ class Graph<NodeInfo, EdgeInfo> {
     }
 
     /**
-     * Normalize the com.ltei.ljugraph items' ids so that they start at 0 and are not fragmented
+     * Normalize the Graph items' ids so that they start at 0 and are not fragmented
      */
     private fun normalizeIds() {
         if (nodes.isNotEmpty()) {
@@ -99,24 +99,29 @@ class Graph<NodeInfo, EdgeInfo> {
         }
     }
 
-    fun <NewNodeInfo> mapNodes(block: (NodeInfo) -> NewNodeInfo) : Graph<NewNodeInfo, EdgeInfo> {
-        return JsonGraph.fromGraph(this).mapNodes(block).toGraph()
-    }
+    fun toJsonGraph() : JsonGraph<NodeInfo, EdgeInfo>
+            = JsonGraph.fromGraph(this)
+
+    fun <NewNodeInfo> mapNodes(block: (NodeInfo) -> NewNodeInfo) : Graph<NewNodeInfo, EdgeInfo>
+            = toJsonGraph().mapNodes(block).toGraph()
+
+    fun <NewEdgeInfo> mapEdges(block: (EdgeInfo) -> NewEdgeInfo) : Graph<NodeInfo, NewEdgeInfo>
+            = toJsonGraph().mapEdges(block).toGraph()
 
     /**
-     * Save this com.ltei.ljugraph into a file
-     * @param file: The file to save this com.ltei.ljugraph to
+     * Save this Graph into a file
+     * @param file: The file to save this Graph to
      */
-    fun save(file: File) = file.writeText(JsonGraph.fromGraph(this).toJson().toString())
+    fun save(file: File) = file.writeText(toJsonGraph().toJson().toString())
 
     //
     // Static
 
     companion object {
         /**
-         * Load a com.ltei.ljugraph from a file
+         * Load a Graph from a file
          * @param file: The file to read
-         * @return Result.ok({newly created com.ltei.ljugraph}) or
+         * @return Result.ok({newly created Graph}) or
          *         Result.err({cause})
          */
         fun <NodeInfo, EdgeInfo> load(file: File): Graph<NodeInfo, EdgeInfo>? = JsonGraph.fromJson<NodeInfo, EdgeInfo>(file.readText())?.toGraph()

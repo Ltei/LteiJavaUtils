@@ -9,12 +9,12 @@ class SimpleCookieJar : CookieJar {
     private val cookieStore = HashMap<String, List<Cookie>>()
     private val emptyCookieList = listOf<Cookie>()
 
-    override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
-        cookieStore[url.host()] = cookies
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+        cookieStore[url.host] = cookies
     }
 
     override fun loadForRequest(url: HttpUrl): List<Cookie> {
-        val cookies = cookieStore[url.host()]
+        val cookies = cookieStore[url.host]
         return cookies ?: emptyCookieList
     }
 

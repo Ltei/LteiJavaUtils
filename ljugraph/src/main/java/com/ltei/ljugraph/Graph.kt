@@ -124,7 +124,8 @@ class Graph<NodeInfo, EdgeInfo> {
          * @return Result.ok({newly created Graph}) or
          *         Result.err({cause})
          */
-        fun <NodeInfo, EdgeInfo> load(file: File): Graph<NodeInfo, EdgeInfo>? = JsonGraph.fromJson<NodeInfo, EdgeInfo>(file.readText())?.toGraph()
+        fun <NodeInfo, EdgeInfo> load(file: File): Graph<NodeInfo, EdgeInfo>? =
+            JsonGraph.fromJson<NodeInfo, EdgeInfo>(file.readText()).toGraph()
     }
 
 }

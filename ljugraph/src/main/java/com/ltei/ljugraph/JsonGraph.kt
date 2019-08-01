@@ -1,13 +1,14 @@
 package com.ltei.ljugraph
 
-import com.ltei.ljugson.GsonUtils
+import com.google.gson.Gson
+import com.ltei.ljugson.fromJson
 
 class JsonGraph<NodeInfo, EdgeInfo> private constructor(
     val nodes: List<Node<NodeInfo>>,
     val edges: List<Edge<EdgeInfo>>
 ) {
 
-    fun toJson() = GsonUtils.toGson(this)
+    fun toJson() = gson.toJson(this)
 
     fun toGraph(): Graph<NodeInfo, EdgeInfo> {
         val graph = Graph<NodeInfo, EdgeInfo>()
@@ -35,7 +36,9 @@ class JsonGraph<NodeInfo, EdgeInfo> private constructor(
     }
 
     companion object {
-        fun <NodeInfo, EdgeInfo> fromJson(json: String) = GsonUtils.fromGson<JsonGraph<NodeInfo, EdgeInfo>>(json)
+        private val gson = Gson()
+
+        fun <NodeInfo, EdgeInfo> fromJson(json: String) = gson.fromJson<JsonGraph<NodeInfo, EdgeInfo>>(json)
 
         fun <NodeInfo, EdgeInfo> fromGraph(graph: Graph<NodeInfo, EdgeInfo>): JsonGraph<NodeInfo, EdgeInfo> {
             val nodes = graph.nodes.map { Node(it.id, it.info) }

@@ -35,9 +35,9 @@ inline fun <reified T> Gson.fromJson(json: String): T = fromJson(json, T::class.
 inline fun <reified T> Gson.fromJson(json: Reader): T = fromJson(json, T::class.java)!!
 inline fun <reified T> Gson.fromJson(json: JsonElement): T = fromJson(json, T::class.java)!!
 
-inline fun <reified T> Gson.fromJsonList(json: String): List<T> = fromJson(json, GsonImpls.listType<T>())!!
-inline fun <reified T> Gson.fromJsonList(json: Reader): List<T> = fromJson(json, GsonImpls.listType<T>())!!
-inline fun <reified T> Gson.fromJsonList(json: JsonArray): List<T> = fromJson(json, GsonImpls.listType<T>())!!
+inline fun <reified T> Gson.fromJsonArray(json: String): List<T> = fromJson(json, GsonImpls.listType<T>())!!
+inline fun <reified T> Gson.fromJsonArray(json: Reader): List<T> = fromJson(json, GsonImpls.listType<T>())!!
+inline fun <reified T> Gson.fromJsonArray(json: JsonArray): List<T> = fromJson(json, GsonImpls.listType<T>())!!
 
 
 // JsonObject methods

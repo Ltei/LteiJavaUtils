@@ -1,7 +1,6 @@
 package com.ltei.ljuutils
 
 class MinMax<T: Comparable<T>> {
-
     private var mMin: T? = null
     private var mMax: T? = null
 
@@ -12,6 +11,4 @@ class MinMax<T: Comparable<T>> {
         if (mMin == null || newValue < mMin!!) mMin = newValue
         if (mMax == null || newValue > mMax!!) mMax = newValue
     }
-
-
 }

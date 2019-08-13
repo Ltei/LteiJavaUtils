@@ -1,0 +1,10 @@
+# Ignore everything in the root
+/*
+
+# Un-ignore all of subtree
+!/lju*/src/main/java
+!/lju*/src/build.gradle
+!/build.gradle
+!/settings.gradle
+!/gradle.properties
+!/.gitignore

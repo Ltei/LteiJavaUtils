@@ -8,26 +8,6 @@ import com.google.gson.reflect.TypeToken
 import java.io.Reader
 import java.lang.reflect.Type
 
-/**
- * Contains utils functions used in this impl file
- */
-object GsonImpls {
-    inline fun <T> tryCatchNull(block: () -> T): T? = try {
-        block()
-    } catch (t: Throwable) {
-        null
-    }
-
-    inline fun tryCatchBool(block: () -> Unit) = try {
-        block()
-        true
-    } catch (t: Throwable) {
-        false
-    }
-
-    inline fun <reified T> listType(): Type = TypeToken.getParameterized(List::class.java, T::class.java).type
-}
-
 
 // Gson methods
 
@@ -62,3 +42,24 @@ inline val JsonElement.asBooleanOrNull: Boolean? get() = GsonImpls.tryCatchNull 
 inline val JsonElement.asStringOrNull: String? get() = GsonImpls.tryCatchNull { asString }
 inline val JsonElement.asJsonObjectOrNull: JsonObject? get() = GsonImpls.tryCatchNull { asJsonObject }
 inline val JsonElement.asJsonArrayOrNull: JsonArray? get() = GsonImpls.tryCatchNull { asJsonArray }
+
+
+/**
+ * Contains utils functions used in this impl file
+ */
+object GsonImpls {
+    inline fun <T> tryCatchNull(block: () -> T): T? = try {
+        block()
+    } catch (t: Throwable) {
+        null
+    }
+
+    inline fun tryCatchBool(block: () -> Unit) = try {
+        block()
+        true
+    } catch (t: Throwable) {
+        false
+    }
+
+    inline fun <reified T> listType(): Type = TypeToken.getParameterized(List::class.java, T::class.java).type
+}

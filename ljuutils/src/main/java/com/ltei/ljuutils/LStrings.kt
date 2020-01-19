@@ -1,5 +1,6 @@
 package com.ltei.ljuutils
 
+@Deprecated("Moved to misc.ListUtils")
 object LStrings {
 
     fun formatDouble(double: Double, precision: Int = 2): String {

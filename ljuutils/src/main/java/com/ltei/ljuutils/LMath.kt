@@ -3,6 +3,7 @@ package com.ltei.ljuutils
 import com.ltei.ljubase.LAssert
 import kotlin.math.*
 
+@Deprecated("Moved to misc.MathUtils")
 object LMath {
 
     fun crop(value: Float, min: Float, max: Float): Float {

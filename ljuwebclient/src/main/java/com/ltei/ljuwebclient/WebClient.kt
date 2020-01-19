@@ -8,9 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-class WebClient(logLevel: Int = Logger.LEVEL_DEBUG) {
-
-    val logger = Logger(this, logLevel)
+class WebClient {
 
     private val okHttpClient = OkHttpClient.Builder()
         .cookieJar(SimpleCookieJar())
@@ -41,6 +39,10 @@ class WebClient(logLevel: Int = Logger.LEVEL_DEBUG) {
             val json = JsonParser().parse(body)
             json
         }
+    }
+
+    companion object {
+        val logger = Logger(WebClient::class.java)
     }
 
 }

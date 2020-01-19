@@ -1,10 +1,10 @@
-# Ignore everything in the root
-/*
+.idea
+.gradle
+gradle
+gradlew
+gradlew.bat
+*.iml
+lju*/build
+lju*/out
 
-# Un-ignore all of subtree
-!/lju*/src/main/java
-!/lju*/src/build.gradle
-!/build.gradle
-!/settings.gradle
-!/gradle.properties
-!/.gitignore
+ljujsondb

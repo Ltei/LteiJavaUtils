@@ -1,4 +1,4 @@
-package com.ltei.ljuutils
+package com.ltei.ljuutils.misc
 
 class Cooldown(val cooldown: Long) {
 

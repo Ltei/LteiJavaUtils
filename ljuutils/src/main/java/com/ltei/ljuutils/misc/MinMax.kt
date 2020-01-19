@@ -1,4 +1,4 @@
-package com.ltei.ljuutils
+package com.ltei.ljuutils.misc
 
 class MinMax<T: Comparable<T>> {
     private var mMin: T? = null

@@ -13,9 +13,9 @@ open class Vector2<T: Number>(
         fun vectorAngle(x: Float, y: Float) = atan2(y, x)
         //Compute the dot product AB . BC
         private fun dotProduct(pointA: Vector2<Float>, pointB: Vector2<Float>, pointC: Vector2<Float>): Float {
-            val AB = Vector2(pointB.x - pointA.x, pointB.y - pointA.y)
-            val BC = Vector2(pointC.x - pointB.x, pointC.y - pointB.y)
-            return AB.x * BC.x + AB.y * BC.y
+            val ab = Vector2(pointB.x - pointA.x, pointB.y - pointA.y)
+            val bc = Vector2(pointC.x - pointB.x, pointC.y - pointB.y)
+            return ab.x * bc.x + ab.y * bc.y
         }
 
         //Compute the cross product AB x AC

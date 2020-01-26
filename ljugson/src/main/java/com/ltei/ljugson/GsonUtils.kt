@@ -2,7 +2,6 @@ package com.ltei.ljugson
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
 import java.io.Reader
 import java.lang.reflect.Type
 

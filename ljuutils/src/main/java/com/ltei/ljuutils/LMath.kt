@@ -83,7 +83,7 @@ object LMath {
 
 
     fun angleRadFromVec(x: Double, y: Double): Double {
-        var angle = Math.atan2(y, x)
+        var angle = atan2(y, x)
         if (angle < 0) angle += 2.0 * Math.PI
         return angle
     }

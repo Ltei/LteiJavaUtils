@@ -6,25 +6,25 @@ class Logger(
     val name: String = clazz.simpleName!!
 ) {
 
-    fun debug(message: String = "") {
+    fun debug(message: Any = "") {
         if (level <= LEVEL_DEBUG && BASE_LEVEL <= LEVEL_DEBUG) {
             println("[$TAG][$name][${logParametrizedName(clazz)}][DEBUG] $message")
         }
     }
 
-    fun info(message: String = "") {
+    fun info(message: Any = "") {
         if (level <= LEVEL_INFO && BASE_LEVEL <= LEVEL_INFO) {
             println("[$TAG][$name][${logParametrizedName(clazz)}][INFO] $message")
         }
     }
 
-    fun warn(message: String = "") {
+    fun warn(message: Any = "") {
         if (level <= LEVEL_WARN && BASE_LEVEL <= LEVEL_WARN) {
             println("[$TAG][$name][${logParametrizedName(clazz)}][WARN] $message")
         }
     }
 
-    fun err(message: String = "") {
+    fun err(message: Any = "") {
         if (level <= LEVEL_ERR && BASE_LEVEL <= LEVEL_ERR) {
             println("[$TAG][$name][${logParametrizedName(clazz)}][ERR] $message")
         }

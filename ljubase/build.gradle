@@ -6,5 +6,5 @@ repositories {
 }
 
 dependencies {
-    compile kotlin_compile_path
+    implementation deps.kotlin
 }

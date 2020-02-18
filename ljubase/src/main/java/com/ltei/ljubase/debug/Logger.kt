@@ -2,19 +2,19 @@ package com.ltei.ljubase.debug
 
 class Logger(
     val clazz: Class<*>,
-    var level: Int = LEVEL_DEBUG,
+    var level: Int = BASE_LEVEL,
     val name: String = clazz.simpleName!!
 ) {
-
-    fun debug(message: Any = "") {
-        if (level <= LEVEL_DEBUG && BASE_LEVEL <= LEVEL_DEBUG) {
-            println("[$TAG][$name][${logParametrizedName(clazz)}][DEBUG] $message")
-        }
-    }
 
     fun info(message: Any = "") {
         if (level <= LEVEL_INFO && BASE_LEVEL <= LEVEL_INFO) {
             println("[$TAG][$name][${logParametrizedName(clazz)}][INFO] $message")
+        }
+    }
+
+    fun debug(message: Any = "") {
+        if (level <= LEVEL_DEBUG && BASE_LEVEL <= LEVEL_DEBUG) {
+            println("[$TAG][$name][${logParametrizedName(clazz)}][DEBUG] $message")
         }
     }
 
@@ -61,8 +61,8 @@ class Logger(
     companion object {
         const val TAG = "XAV"
 
-        const val LEVEL_DEBUG = 1
-        const val LEVEL_INFO = 2
+        const val LEVEL_INFO = 1
+        const val LEVEL_DEBUG = 2
         const val LEVEL_WARN = 3
         const val LEVEL_ERR = 4
 
@@ -72,7 +72,7 @@ class Logger(
         var STACKTRACE_DELTA = STACKTRACE_DELTA_JAVA
         const val LOG_CLASS_INDEX = 3
 
-        const val BASE_LEVEL = LEVEL_DEBUG
+        var BASE_LEVEL = LEVEL_DEBUG
 
         val DEFAULT = Logger(this::class.java)
     }

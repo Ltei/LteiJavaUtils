@@ -1,6 +1,5 @@
 package com.ltei.ljuutils.datamanager
 
-import com.ltei.ljubase.debug.Logger
 import com.ltei.ljubase.utils.contains
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
@@ -11,37 +10,40 @@ import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaType
 
-class ObjectManagerFactory {
-
-//    val propertyManagers = mutableMapOf<Class<*>, PropertyManager<*>>()
+class ObjectManagerFactory(
+    val propertyManagers: MutableMap<Class<*>, PropertyManager<*>> = mutableMapOf()
+) {
 
     inline fun <reified T : Any> create() = create(T::class)
 
     fun <T : Any> create(clazz: KClass<T>): ObjectManager<T> {
         val managedFields = getManagedFields(clazz)
-        val fieldsInfo = managedFields.map { field -> createFieldInfo(clazz, field) }
+        val fieldsInfo: List<FieldInfo<T, Any?>> = managedFields.map { field ->
+            createFieldInfo(clazz, field) as FieldInfo<T, Any?>
+        }
 
         // Create manager
         return object : ObjectManager<T> {
             override fun isEmpty(obj: T): Boolean {
                 return fieldsInfo.all {
-                    val manager = it.propertyManagerProvider.getManager(obj)
-                    propertyManagerMethods.isEmpty.invoke(manager, it.property.get(obj)) as Boolean
+                    val manager = it.getPropertyManager(obj)
+                    val fieldValue = it.property.get(obj)
+                    manager.isEmpty(fieldValue)
                 }
             }
 
             override fun clear(obj: T) {
                 for (it in fieldsInfo) {
-                    kMutableProperty1Methods.set.invoke(it.property, obj, null)
+                    it.property.set(obj, null)
                 }
             }
 
             override fun normalize(obj: T) {
                 for (it in fieldsInfo) {
-                    val manager = it.propertyManagerProvider.getManager(obj)
+                    val manager = it.getPropertyManager(obj)
                     val fieldValue = it.property.get(obj)
-                    val normalizedField = propertyManagerMethods.normalize.invoke(manager, fieldValue)
-                    kMutableProperty1Methods.set.invoke(it.property, obj, normalizedField)
+                    val normalizedField = manager.normalize(fieldValue)
+                    it.property.set(obj, normalizedField)
                 }
             }
 
@@ -50,9 +52,9 @@ class ObjectManagerFactory {
                 for (it in fieldsInfo) {
                     val previousField = it.property.get(objToUpdate)
                     val newField = it.property.get(newObj)
-                    val manager = it.propertyManagerProvider.getManager(objToUpdate)
-                    val updatedField = propertyManagerMethods.merge.invoke(manager, previousField, newField)
-                    kMutableProperty1Methods.set.invoke(it.property, objToUpdate, updatedField)
+                    val manager = it.getPropertyManager(objToUpdate)
+                    val updatedField = manager.merge(previousField, newField)
+                    it.property.set(objToUpdate, updatedField)
                 }
             }
         }
@@ -91,8 +93,8 @@ class ObjectManagerFactory {
             assertManagerNull()
             val managerConstructor = annotation.managerClass.primaryConstructor
                 ?: throw IllegalArgumentException("Field ${field.name} manager call (${annotation.managerClass.simpleName}) doesn't have primary constructor")
-            val manager = managerConstructor.call()
-            propertyManagerProvider = PropertyManagerProvider.Simple(manager as PropertyManager<*>)
+            val manager = managerConstructor.call() as PropertyManager<Any>
+            propertyManagerProvider = PropertyManagerProvider.Simple(manager)
         }
 
         field.findAnnotation<ManagedByProperty>()?.let { annotation ->
@@ -108,8 +110,8 @@ class ObjectManagerFactory {
         }
 
         if (propertyManagerProvider == null) {
-            val manager = inferPropertyManager(javaField.type, field.returnType)
-            propertyManagerProvider = PropertyManagerProvider.Simple(manager as PropertyManager<*>)
+            val manager = inferPropertyManager(javaField.type, field.returnType) as PropertyManager<Any>
+            propertyManagerProvider = PropertyManagerProvider.Simple(manager)
         }
 
         return FieldInfo(
@@ -120,8 +122,8 @@ class ObjectManagerFactory {
     }
 
     private fun <T> inferPropertyManager(clazz: Class<T>, type: KType): PropertyManager<T> {
-//        val mapped = propertyManagers[clazz] // TODO Infer from ObjectManagerFactory data
-//        if (mapped != null) return mapped as PropertyManager<T>
+        val mapped = propertyManagers[clazz]
+        if (mapped != null) return mapped as PropertyManager<T>
         return createDefaultPropertyManager(clazz, type)
     }
 
@@ -130,65 +132,44 @@ class ObjectManagerFactory {
             List::class.java.isAssignableFrom(clazz) -> {
                 val typeParam = type.arguments.first().type!!
                 val typePropertyManager =
-                    inferPropertyManager(typeParam.javaType as Class<*>, typeParam) as IdentifiablePropertyManager<*>
-                defaultListPropertyManagerMethods.constructor.newInstance(typePropertyManager) as PropertyManager<T>
+                    inferPropertyManager(typeParam.javaType as Class<*>, typeParam)
+                DefaultListPropertyManager(typePropertyManager) as PropertyManager<T>
             }
-            type == String::class -> DefaultIdentifiablePropertyManager()
-//            else -> create(clazz)
-            else -> DefaultIdentifiablePropertyManager()
+            else -> DefaultPropertyManager()
         }
-    }
-
-    // Static
-
-    companion object {
-        val logger = Logger(ObjectManagerFactory::class.java)
-
-        private val objectClass = Object::class.java
-
-        private val propertyManagerMethods = PropertyManagerMethods()
-        private val defaultListPropertyManagerMethods = DefaultListPropertyManagerMethods()
-        private val kMutableProperty1Methods = KMutableProperty1Methods()
     }
 
     private data class FieldInfo<R, T>(
         val property: KMutableProperty1<R, T>,
         val field: Field,
-        val propertyManagerProvider: PropertyManagerProvider
-    )
-
-    private class PropertyManagerMethods {
-        val isEmpty = PropertyManager::class.java.getMethod("isEmpty", objectClass)!!
-        val normalize = PropertyManager::class.java.getMethod("normalize", objectClass)!!
-        val merge = PropertyManager::class.java.getMethod("merge", objectClass, objectClass)!!
-    }
-
-    private class DefaultListPropertyManagerMethods {
-        val constructor = DefaultListPropertyManager::class.java.constructors.first()!!
-    }
-
-    private class KMutableProperty1Methods {
-        val set = KMutableProperty1::class.java.getMethod("set", objectClass, objectClass)!!
+        private val propertyManagerProvider: PropertyManagerProvider
+    ) {
+        private var propertyManager: PropertyManager<Any>? = null
+        fun getPropertyManager(obj: Any): PropertyManager<Any> {
+            if (propertyManager == null) {
+                propertyManager = propertyManagerProvider.getManager(obj)
+            }
+            return propertyManager!!
+        }
     }
 
     private interface PropertyManagerProvider {
-        fun getManager(receiver: Any): PropertyManager<*>
+        fun getManager(obj: Any): PropertyManager<Any>
 
-        data class Simple(val manager: PropertyManager<*>) : PropertyManagerProvider {
-            override fun getManager(receiver: Any): PropertyManager<*> = manager
+        data class Simple(val manager: PropertyManager<Any>) : PropertyManagerProvider {
+            override fun getManager(obj: Any): PropertyManager<Any> = manager
         }
 
         data class FromKProperty<T>(val property: KProperty1<T, *>) : PropertyManagerProvider {
-            override fun getManager(receiver: Any): PropertyManager<*> {
-                return property.get(receiver as T) as PropertyManager<*>
+            override fun getManager(obj: Any): PropertyManager<Any> {
+                return property.get(obj as T) as PropertyManager<Any>
             }
         }
 
         data class FromCompanionKProperty<T>(val property: KProperty1<T, *>) : PropertyManagerProvider {
-            override fun getManager(receiver: Any): PropertyManager<*> {
-                val receiverKClass = receiver.javaClass.kotlin
-                val companionObjectInstance = receiverKClass.companionObjectInstance!!
-                return property.get(companionObjectInstance as T) as PropertyManager<*>
+            override fun getManager(obj: Any): PropertyManager<Any> {
+                val companionObjectInstance = obj.javaClass.kotlin.companionObjectInstance!!
+                return property.get(companionObjectInstance as T) as PropertyManager<Any>
             }
         }
     }

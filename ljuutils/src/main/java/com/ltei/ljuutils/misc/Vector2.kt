@@ -11,6 +11,7 @@ open class Vector2<T: Number>(
 
     companion object {
         fun vectorAngle(x: Float, y: Float) = atan2(y, x)
+
         //Compute the dot product AB . BC
         private fun dotProduct(pointA: Vector2<Float>, pointB: Vector2<Float>, pointC: Vector2<Float>): Float {
             val ab = Vector2(pointB.x - pointA.x, pointB.y - pointA.y)

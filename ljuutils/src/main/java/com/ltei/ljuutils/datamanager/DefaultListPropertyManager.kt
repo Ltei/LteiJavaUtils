@@ -1,10 +1,10 @@
 package com.ltei.ljuutils.datamanager
 
 open class DefaultListPropertyManager<T : Any>(
-    val itemManager: IdentifiablePropertyManager<T> = DefaultIdentifiablePropertyManager()
+    val itemManager: PropertyManager<T> = DefaultPropertyManager()
 ) : PropertyManager<List<T>>() {
     override fun isEmptyImpl(data: List<T>): Boolean {
-        if (data.isNullOrEmpty()) return true
+        if (data.isEmpty()) return true
         return data.all { itemManager.isEmpty(it) }
     }
 
@@ -24,4 +24,10 @@ open class DefaultListPropertyManager<T : Any>(
     }
 
     override fun mergeImpl(previous: List<T>, new: List<T>): List<T>? = normalize(previous + new)
+
+    override fun areSameDataImpl(a: List<T>, b: List<T>): Boolean {
+        if (a.size != b.size) return false
+        if (a.isEmpty()) return true
+        return a.indices.all { itemManager.areSameData(a[it], b[it]) }
+    }
 }

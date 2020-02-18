@@ -8,3 +8,5 @@ fun String.capitalizeWords(): String {
         acc
     }.toString()
 }
+
+fun Number.format(decimals: Int) = "%.${decimals}f".format(this.toDouble())

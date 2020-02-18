@@ -29,7 +29,7 @@ fun Float.rescaleFrom01(newV0: Float, newV1: Float): Float {
 
 // Misc
 
-fun Float.clamp(min: Float, max: Float) = min(max(this, min), max)
+//fun Float.clamp(min: Float, max: Float) = min(max(this, min), max)
 fun Float.modulo(mod: Float): Float {
     val result = rem(mod)
     return if (result < 0) result + mod else result
@@ -65,11 +65,4 @@ fun IntArray.rescaleTo01(min: Int? = min(), max: Int? = max()): FloatArray {
     min!!
     max!!
     return FloatArray(this.size) { this[it].rescaleTo01(min, max) }
-}
-
-fun FloatArray.clamp(min: Float? = min(), max: Float? = max()): FloatArray {
-    if (this.isEmpty()) return FloatArray(0)
-    min!!
-    max!!
-    return FloatArray(this.size) { this[it].clamp(min, max) }
 }

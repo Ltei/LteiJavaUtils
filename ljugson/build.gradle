@@ -6,8 +6,8 @@ repositories {
 }
 
 dependencies {
-    compile kotlin_compile_path
-    compile gson_compile_path
-    
-    compile project(":ljubase")
+    implementation deps.kotlin
+    implementation deps.gson
+
+    implementation project(":ljubase")
 }

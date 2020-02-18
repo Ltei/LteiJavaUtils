@@ -3,7 +3,7 @@ package com.ltei.ljuutils.datamanager
 object DataManagerTests {
 
     class TestClass(
-        @ManagedByClass(DefaultIdentifiablePropertyManager::class)
+        @ManagedByClass(DefaultPropertyManager::class)
         var string: String? = null,
 
         @ManagedByClass(StringListManager::class)
@@ -15,10 +15,10 @@ object DataManagerTests {
         @ManagedByProperty("innerClassManager")
         var inner: TestInnerClass? = null
     ) {
-        class StringListManager : DefaultListPropertyManager<String>(DefaultIdentifiablePropertyManager())
+        class StringListManager : DefaultListPropertyManager<String>(DefaultPropertyManager())
 
         @NotManaged
-        val innerClassManager = ObjectManagerFactory().create<TestInnerClass>().toPropertyManager().toIdentifiable { a, b ->
+        val innerClassManager = ObjectManagerFactory().create<TestInnerClass>().toPropertyManager { a, b ->
             a.string == b.string
         }
 
@@ -32,7 +32,7 @@ object DataManagerTests {
         var string: String? = null
     ) {
         @NotManaged
-        val stringManager = object : DefaultIdentifiablePropertyManager<String>() {
+        val stringManager = object : DefaultPropertyManager<String>() {
             override fun isEmptyImpl(data: String): Boolean = data.isBlank()
         }
     }

@@ -2,7 +2,7 @@ package com.ltei.ljuwebclient
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import com.ltei.ljubase.Logger
+import com.ltei.ljubase.debug.Logger
 import java8.util.concurrent.CompletableFuture
 import okhttp3.OkHttpClient
 import okhttp3.Request

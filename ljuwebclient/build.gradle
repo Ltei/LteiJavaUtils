@@ -6,11 +6,10 @@ repositories {
 }
 
 dependencies {
-    compile kotlin_compile_path
-    
-    compile cfuture_compile_path
-    compile gson_compile_path
-    compile okhttp_compile_path
+    compile deps.kotlin
+    compile deps.cfuture
+    compile deps.gson
+    compile deps.okhttp
 
     compile project(':ljubase')
 }
